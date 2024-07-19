@@ -1,234 +1,252 @@
+
+
 # Migrato
 
-**Migrato** is a powerful tool designed to test API endpoint migrations. It compares data from old and new endpoints, supports various comparison types, and offers flexible configuration options. Whether you're dealing with JSON data structures from different eras or migrating endpoints for a major financial institution, Migrato has you covered.
+Migrato is a powerful tool designed to test API endpoint migrations. It compares data from an old endpoint with data from a new endpoint based on various comparison types, including exact matches, shape matches, custom mappings, specific matches, and pseudo matches. Migrato can handle complex nested structures and supports ignoring specific keys during comparison.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Supported Comparison Keys](#supported-comparison-keys)
+- [Examples](#examples)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **Exact Match**: Compare JSON structures for an exact match.
-- **Shape Match**: Compare the shape of JSON structures.
-- **Custom Mapping**: Map keys from the old endpoint to new keys.
-- **Specific Match**: Compare specific nested values.
-- **Pseudo Match**: Show keys that matched and keys that failed.
-- **Ignore Keys**: Ignore specific keys during comparison.
-- **Ordering Check**: Ensure that lists maintain the same order.
+- Compare data from old and new endpoints
+- Support for various comparison types: exact, shape, custom, specific, pseudo
+- Handle nested structures
+- Ignore specific keys during comparison
+- Provide detailed match and mismatch information
+- **New**: Regression testing for multiple API calls
 
 ## Installation
 
-To install Migrato, clone the repository and install the dependencies:
+Clone the repository and navigate to the project directory:
 
 ```sh
 git clone https://github.com/yourusername/migrato.git
 cd migrato
+```
+
+Install the required dependencies:
+
+```sh
 pip install -r requirements.txt
 ```
 
 ## Usage
 
-To use Migrato, create a configuration file that defines the old and new endpoints, the type of comparison, and any specific keys or mappings. Then, run the `migrato.py` script with the configuration file.
+Start the mock server:
 
 ```sh
-python migrato.py config.json
+python server.py
 ```
 
-## Configuration File
+Run the migrato tool with a configuration file:
 
-The configuration file defines how the old and new endpoints should be compared. Below is an example configuration file:
+```sh
+python migrato.py path/to/config.json
+```
+
+For regression testing with multiple API calls using a CSV file:
+
+```sh
+python migrato.py path/to/config.json --testRegression --csv_file path/to/endpoints.csv
+```
+
+## Configuration
+
+The configuration file is a JSON file that specifies the endpoints and comparison details. Here is an example configuration file:
 
 ```json
 {
-    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s.json",
-    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint.json",
+    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s/userId/{user_id}",
+    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint/customer/{user_id}",
     "comparisons": [
         {
             "comparison_type": "exact",
-            "start_depth_old": "transactions",
-            "start_depth_new": "transactions"
-        },
-        {
-            "comparison_type": "shape",
-            "start_depth_old": "account.details",
-            "start_depth_new": "profile.details"
+            "start_depth_old": "root.level1.level2",
+            "start_depth_new": "root.levelA.levelB"
         },
         {
             "comparison_type": "custom",
             "custom_mapping": {
-                "oldName": "newName",
-                "oldBalance": "currentBalance"
+                "oldKey1": "newKey1",
+                "oldKey2": "newKey2"
             },
-            "start_depth_old": "account.info",
-            "start_depth_new": "profile.info",
+            "start_depth_old": "root.oldPath",
+            "start_depth_new": "root.newPath",
             "ignore_keys": ["timestamp"]
         },
         {
-            "comparison_type": "specific",
-            "specific_match": {
-                "old": "account.transactions.oldFormat",
-                "new": "profile.transactions.newFormat"
-            }
-        },
-        {
-            "comparison_type": "pseudo",
+            "comparison_type": "orderingCheck",
             "start_depth_old": "transactions",
             "start_depth_new": "transactions"
-        },
-        {
-            "comparison_type": "exact",
-            "start_depth_old": "transactions",
-            "start_depth_new": "transactions",
-            "orderingCheck": true
         }
     ]
 }
 ```
 
+### Supported Comparison Keys
+
+- `exact`: Compares if the data is exactly the same.
+- `shape`: Compares if the data structure and length are the same.
+- `custom`: Maps old keys to new keys for comparison.
+- `specific`: Compares specific nested structures.
+- `pseudo`: Provides detailed
+
+ information on matched and unmatched keys.
+- `orderingCheck`: Checks if the order of elements is maintained.
+
 ## Examples
 
 ### Example 1: Exact Match
 
-**Scenario**: Comparing transaction lists from an ancient banking system to a modern system.
+Comparing customer details from the 2000s to the latest system:
 
-- **Old Endpoint (from the 2000s)**:
-    ```json
-    {
-        "transactions": [
-            { "id": 1, "amount": 100, "timestamp": "2001-01-01T00:00:00Z" },
-            { "id": 2, "amount": 200, "timestamp": "2001-01-02T00:00:00Z" }
-        ]
-    }
-    ```
+**Configuration:**
 
-- **New Endpoint (latest)**:
-    ```json
-    {
-        "transactions": [
-            { "id": 1, "amount": 100, "timestamp": "2023-01-01T00:00:00Z" },
-            { "id": 2, "amount": 200, "timestamp": "2023-01-02T00:00:00Z" }
-        ]
-    }
-    ```
-
-- **Configuration**:
-    ```json
-    {
-        "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s.json",
-        "new_endpoint": "http://localhost:8000/test_data/latestEndpoint.json",
-        "comparisons": [
-            {
-                "comparison_type": "exact",
-                "start_depth_old": "transactions",
-                "start_depth_new": "transactions"
-            }
-        ]
-    }
-    ```
+```json
+{
+    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s/customerDetails.json",
+    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint/customerDetails.json",
+    "comparisons": [
+        {
+            "comparison_type": "exact",
+            "start_depth_old": "customerInfo",
+            "start_depth_new": "customerData"
+        }
+    ]
+}
+```
 
 ### Example 2: Custom Mapping
 
-**Scenario**: Mapping old account details to new profile format.
+Comparing transaction data with different key names:
 
-- **Old Endpoint (from the 2000s)**:
-    ```json
-    {
-        "account": {
-            "info": {
-                "oldName": "John Doe",
-                "oldBalance": 1000,
-                "timestamp": "2001-01-01T00:00:00Z"
-            }
+**Configuration:**
+
+```json
+{
+    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s/transactions.json",
+    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint/transactions.json",
+    "comparisons": [
+        {
+            "comparison_type": "custom",
+            "custom_mapping": {
+                "oldTransactionID": "newTransactionID",
+                "oldAmount": "newAmount"
+            },
+            "start_depth_old": "transactions.oldFormat",
+            "start_depth_new": "transactions.newFormat",
+            "ignore_keys": ["timestamp"]
         }
-    }
-    ```
+    ]
+}
+```
 
-- **New Endpoint (latest)**:
-    ```json
-    {
-        "profile": {
-            "info": {
-                "newName": "John Doe",
-                "currentBalance": 1000,
-                "timestamp": "2023-01-01T00:00:00Z"
-            }
+### Example 3: Pseudo Match
+
+Providing detailed information on matched and unmatched keys for bank account balances:
+
+**Configuration:**
+
+```json
+{
+    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s/accountBalances.json",
+    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint/accountBalances.json",
+    "comparisons": [
+        {
+            "comparison_type": "pseudo",
+            "start_depth_old": "accounts.oldBalances",
+            "start_depth_new": "accounts.newBalances"
         }
-    }
-    ```
+    ]
+}
+```
 
-- **Configuration**:
-    ```json
-    {
-        "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s.json",
-        "new_endpoint": "http://localhost:8000/test_data/latestEndpoint.json",
-        "comparisons": [
-            {
-                "comparison_type": "custom",
-                "custom_mapping": {
-                    "oldName": "newName",
-                    "oldBalance": "currentBalance"
-                },
-                "start_depth_old": "account.info",
-                "start_depth_new": "profile.info",
-                "ignore_keys": ["timestamp"]
-            }
-        ]
-    }
-    ```
+### Example 4: Ordering Check
 
-### Example 3: Ordering Check
+Ensuring the order of transactions is maintained:
 
-**Scenario**: Ensuring the order of transactions remains the same.
+**Configuration:**
 
-- **Old Endpoint (from the 2000s)**:
-    ```json
-    {
-        "transactions": [
-            { "id": 1, "amount": 100, "timestamp": "2001-01-01T00:00:00Z" },
-            { "id": 2, "amount": 200, "timestamp": "2001-01-02T00:00:00Z" }
-        ]
-    }
-    ```
+```json
+{
+    "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s/transactions.json",
+    "new_endpoint": "http://localhost:8000/test_data/latestEndpoint/transactions.json",
+    "comparisons": [
+        {
+            "comparison_type": "orderingCheck",
+            "start_depth_old": "transactions.oldOrder",
+            "start_depth_new": "transactions.newOrder"
+        }
+    ]
+}
+```
 
-- **New Endpoint (latest)**:
-    ```json
-    {
-        "transactions": [
-            { "id": 2, "amount": 200, "timestamp": "2023-01-02T00:00:00Z" },
-            { "id": 1, "amount": 100, "timestamp": "2023-01-01T00:00:00Z" }
-        ]
-    }
-    ```
+### Example 5: Regression Testing
 
-- **Configuration**:
-    ```json
-    {
-        "old_endpoint": "http://localhost:8000/test_data/endpointFrom2000s.json",
-        "new_endpoint": "http://localhost:8000/test_data/latestEndpoint.json",
-        "comparisons": [
-            {
-                "comparison_type": "exact",
-                "start_depth_old": "transactions",
-                "start_depth_new": "transactions",
-                "orderingCheck": true
-            }
-        ]
-    }
-    ```
+Regression testing across multiple user endpoints:
 
-## Running Tests
+**CSV File (endpoints.csv):**
 
-To run the tests, start the mock server and execute the test suite using `pytest`.
+```
+old_endpoint,new_endpoint
+http://localhost:8000/test_data/endpointFrom2000s/userId/2,http://localhost:8000/test_data/latestEndpoint/customer/2
+http://localhost:8000/test_data/endpointFrom2000s/userId/3,http://localhost:8000/test_data/latestEndpoint/customer/3
+...
+http://localhost:8000/test_data/endpointFrom2000s/userId/100,http://localhost:8000/test_data/latestEndpoint/customer/100
+```
+
+**Configuration:**
+
+```json
+{
+    "comparisons": [
+        {
+            "comparison_type": "exact",
+            "start_depth_old": "userInfo",
+            "start_depth_new": "customerData"
+        },
+        {
+            "comparison_type": "custom",
+            "custom_mapping": {
+                "oldTransactionID": "newTransactionID",
+                "oldAmount": "newAmount"
+            },
+            "start_depth_old": "transactions.oldFormat",
+            "start_depth_new": "transactions.newFormat",
+            "ignore_keys": ["timestamp"]
+        },
+        {
+            "comparison_type": "orderingCheck",
+            "start_depth_old": "transactions",
+            "start_depth_new": "transactions"
+        }
+    ]
+}
+```
+
+Run the migrato tool with the regression testing flag and CSV file:
 
 ```sh
-python server.py &
-pytest test_migrator.py
+python migrato.py path/to/config.json --testRegression --csv_file path/to/endpoints.csv
 ```
 
 ## Contributing
 
-We welcome contributions from the community! Please fork the repository, make your changes, and submit a pull request.
+We welcome contributions from the community! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-This markdown file provides a comprehensive guide to using the Migrato tool, complete with installation instructions, usage examples, and detailed configuration explanations. The examples use creative scenarios from the banking domain to illustrate the tool's capabilities.
+This documentation provides a comprehensive overview of Migrato, its features, and how to use it with various examples. Feel free to customize and expand it as needed for your project.
