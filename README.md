@@ -1,7 +1,3 @@
-Sure! Below is a detailed markdown documentation for the open-source project `migrato`. This documentation follows a common open-source project format, explains the use of the tool, how the template works, and provides examples from the banking domain.
-
----
-
 # Migrato
 
 **Migrato** is a powerful tool designed to test API endpoint migrations. It compares data from old and new endpoints, supports various comparison types, and offers flexible configuration options. Whether you're dealing with JSON data structures from different eras or migrating endpoints for a major financial institution, Migrato has you covered.
