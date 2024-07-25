@@ -29,7 +29,7 @@ Migrato is a powerful tool designed to test API endpoint migrations. It compares
 Clone the repository and navigate to the project directory:
 
 ```sh
-git clone https://github.com/yourusername/migrato.git
+git clone https://github.com/syedm1/migrato.git
 cd migrato
 ```
 
