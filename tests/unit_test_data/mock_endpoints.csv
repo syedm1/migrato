@@ -1,0 +1,2 @@
+old_endpoint,new_endpoint
+http://localhost:8000/test_data/old_data.json,http://localhost:8000/test_data/new_data.json
