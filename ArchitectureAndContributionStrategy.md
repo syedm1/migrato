@@ -150,7 +150,29 @@ sequenceDiagram
 
 Migrato welcomes contributions from the community. Our goal is to foster a collaborative environment where developers can enhance the tool's functionality, improve its performance, and add new comparison strategies.
 
-#### New Strategy: Pseudo Match
+#### How to Contribute
+Types of Contributions
+Reporting Bugs: If you find a bug, let us know by creating an issue.
+Feature Requests: If you have an idea for a new feature, suggest it by opening an issue.
+Code Contributions: Help us improve the codebase by fixing bugs, adding new features, or improving documentation.
+Reviewing Code: Provide feedback on pull requests to help maintain the quality of the codebase.
+
+#### Code Style
+PEP 8: Follow the PEP 8 style guide for Python code.
+Docstrings: Write clear and concise docstrings for all functions and classes.
+Comments: Use comments to explain complex logic or code sections.
+
+#### Testing
+Unit Tests: Write unit tests for all new features and bug fixes.
+Coverage: Ensure tests have high coverage of the codebase.
+CI: All tests must pass before a pull request can be merged.
+
+#### Communication Channels
+GitHub Issues: Use GitHub issues for tracking bugs, feature requests, and other discussions.
+Pull Requests: Use pull requests for code reviews and discussions.
+Email: You can contact the maintainers via email for any private or sensitive matters.
+
+#### Example contribution flow - New Strategy: Pseudo Match
 
 **Description:**
 The `Pseudo Match` strategy provides a detailed comparison report highlighting which keys matched and which did not, offering insights into potential discrepancies.
