@@ -1,0 +1,1 @@
+{"old_endpoint": "http://localhost:8000/test_data/old_data.json", "new_endpoint": "http://localhost:8000/test_data/new_data.json", "comparisons": [{"comparison_type": "exact", "start_depth_old": "data", "start_depth_new": "data"}]}

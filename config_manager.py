@@ -1,7 +1,6 @@
 import json
 import os
-from enums import comparison_types as ComparisonType
-
+from enums.comparison_types import ComparisonType
 
 class ConfigManager:
     _instance = None
@@ -33,14 +32,8 @@ class ConfigManager:
             raise ValueError("Config file format is invalid")
 
         # Convert comparison types to enums
-        self.config['comparisons'] = [
-            {
-                'comparison_type': ComparisonType[comp['comparison_type'].upper()],
-                'start_depth_old': comp['start_depth_old'],
-                'start_depth_new': comp['start_depth_new']
-            }
-            for comp in self.config['comparisons']
-        ]
+        for comparison in self.config['comparisons']:
+            comparison['comparison_type'] = ComparisonType.get_enum_from_string(comparison['comparison_type'])
 
     def get_config(self):
         return self.config
@@ -49,19 +42,20 @@ class ConfigManager:
         required_keys = ["old_endpoint", "new_endpoint", "comparisons"]
         for key in required_keys:
             if key not in config:
+                print(f"Missing key: {key}")
                 return False
 
         if not isinstance(config["comparisons"], list):
+            print("Comparisons is not a list")
             return False
 
         for comparison in config["comparisons"]:
             if "comparison_type" not in comparison or "start_depth_old" not in comparison or "start_depth_new" not in comparison:
+                print(f"Missing keys in comparison: {comparison}")
                 return False
 
-            try:
-                ComparisonType(comparison["comparison_type"].upper())
-            except KeyError:
+            if not ComparisonType.is_valid_enum(comparison["comparison_type"].lower()):
+                print(f"Invalid comparison type: {comparison['comparison_type']}")
                 return False
 
         return True
-
