@@ -2,8 +2,10 @@ import logging
 import csv
 from config_manager import ConfigManager
 import MigrateCommand
+from command import Command
 
-class RegressionCommand:
+
+class RegressionCommand(Command):
     def __init__(self, csv_file):
         self.csv_file = csv_file
 
