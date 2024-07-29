@@ -1,7 +1,7 @@
 import logging
 import csv
 from config_manager import ConfigManager
-from comparisons import ComparisonStrategyFactory, get_nested_value
+from Comparisions.comparisons import ComparisonStrategyFactory, get_nested_value
 from utils import fetch_data, remove_ignored_keys
 
 class Command:
