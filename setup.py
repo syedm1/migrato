@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='migrato',
-    version='1.0.0',
+    version='1.0.1',
     packages=find_packages(),
     install_requires=[
         'requests',
@@ -12,8 +12,7 @@ setup(
             'migrato = migrato:main',
         ],
     },
-    author='Your Name',
-    author_email='your.email@example.com',
+    author='Sharukh Syed',
     description='API Endpoint Migrator Tool',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
