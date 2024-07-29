@@ -1,4 +1,4 @@
-from comparison_strategy import ComparisonStrategy
+from comparison_strategies.comparison_strategy import ComparisonStrategy
 
 
 class PseudoComparisonStrategy(ComparisonStrategy):
