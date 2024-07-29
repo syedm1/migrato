@@ -48,7 +48,7 @@ class ConfigManager:
         return None
 
     def _validate_config(self, config):
-        required_keys = ["old_endpoint", "new_endpoint", "comparisons"]
+        required_keys = ["comparisons"]
         for key in required_keys:
             if key not in config:
                 print(f"Missing key: {key}")
