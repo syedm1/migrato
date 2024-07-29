@@ -2,7 +2,7 @@ import pytest
 import json
 import os
 
-from MigrateCommand import MigrateCommand
+from commands.MigrateCommand import MigrateCommand
 from config_manager import ConfigManager
 
 @pytest.fixture(scope="module")

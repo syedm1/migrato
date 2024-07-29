@@ -1,9 +1,8 @@
-import config_manager
 import utils
 from comparison_strategies.factory import ComparisonStrategyFactory
 from config_manager import ConfigManager
 import logging
-from command import Command
+from commands.command import Command
 
 class MigrateCommand(Command):
     def __init__(self, old_endpoint, new_endpoint, path_to_config):

@@ -241,7 +241,7 @@ python migrato.py path/to/config.json --testRegression --csv_file path/to/endpoi
 
 ## Contributing
 
-We welcome contributions from the community! Please read our [contributing guide](ArchitectureAndContributionStrategy.md) to get started.
+We welcome contributions from the community! Please read our [contributing guide](docs/ArchitectureAndContributionStrategy.md) to get started.
 
 ## License
 

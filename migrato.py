@@ -1,9 +1,9 @@
 import argparse
 import logging
 
-from MigrateCommand import MigrateCommand
-from RegressionCommand import RegressionCommand
-from HelpCommand import HelpCommand
+from commands.MigrateCommand import MigrateCommand
+from commands.RegressionCommand import RegressionCommand
+from commands.HelpCommand import HelpCommand
 
 
 def main():

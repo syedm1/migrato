@@ -2,8 +2,8 @@ import unittest
 import json
 import os
 
-from MigrateCommand import MigrateCommand
-from RegressionCommand import RegressionCommand
+from commands.MigrateCommand import MigrateCommand
+from commands.RegressionCommand import RegressionCommand
 from config_manager import ConfigManager
 
 class TestCommands(unittest.TestCase):

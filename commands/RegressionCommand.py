@@ -2,7 +2,7 @@ import logging
 import csv
 from config_manager import ConfigManager
 import MigrateCommand
-from command import Command
+from commands.command import Command
 
 
 class RegressionCommand(Command):
