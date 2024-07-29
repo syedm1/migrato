@@ -55,11 +55,9 @@ class TestCommands(unittest.TestCase):
             pass
 
     def test_migrate_command(self):
-        config_manager = ConfigManager.get_instance()
-        config_manager.load_config('test_data/config.json')
         old_endpoint = "test_data/old_data_1.json"
         new_endpoint = "test_data/new_data_1.json"
-        command = MigrateCommand(old_endpoint, new_endpoint)
+        command = MigrateCommand(old_endpoint, new_endpoint, 'test_data/config.json')
         self.assertTrue(command.execute())
 
     def test_regression_test_command(self):

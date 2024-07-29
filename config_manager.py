@@ -36,8 +36,9 @@ class ConfigManager:
         for comparison in self.config['comparisons']:
             comparison['comparison_type'] = ComparisonType.get_enum_from_string(comparison['comparison_type'])
 
-    def get_config(self):
-        return self.config
+    @classmethod
+    def get_config(cls):
+        return cls.get_instance().config
 
     @staticmethod
     def get_config_for_comparison(comparison_type):

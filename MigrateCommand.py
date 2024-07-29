@@ -1,17 +1,28 @@
+import config_manager
 import utils
 from comparison_strategies.factory import ComparisonStrategyFactory
 from config_manager import ConfigManager
 import logging
 
 class MigrateCommand:
-    def __init__(self, old_endpoint, new_endpoint):
+    def __init__(self, old_endpoint, new_endpoint, path_to_config):
         self.old_endpoint = old_endpoint
         self.new_endpoint = new_endpoint
+        self.configPath = path_to_config
         self.logger = logging.getLogger(__name__)
 
     def execute(self):
         try:
-            config = ConfigManager.get_instance().get_config()
+            config_manager = ConfigManager.get_instance()
+            if config_manager.get_config() is None:
+                config_manager.load_config(self.configPath)
+
+            config = config_manager.get_config()
+
+            if config is None:
+                self.logger.error("Config is not loaded")
+                return False
+
             old_data, old_status = utils.fetch_data(self.old_endpoint)
             new_data, new_status = utils.fetch_data(self.new_endpoint)
 
