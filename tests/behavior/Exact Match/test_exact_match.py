@@ -1,21 +1,9 @@
 import pytest
-import subprocess
-import time
 import json
 import os
+
+from MigrateCommand import MigrateCommand
 from config_manager import ConfigManager
-from commands import MigrateCommand
-
-
-# Test Scenario 1: Exact match for account balances
-# Description: This test checks if the account balances match exactly between the old and new endpoints.
-@pytest.fixture(scope="module")
-def start_server():
-    server = subprocess.Popen(["python", "-m", "http.server", "8000"])
-    time.sleep(1)
-    yield
-    server.terminate()
-
 
 @pytest.fixture(scope="module")
 def setup_data():
@@ -34,9 +22,10 @@ def setup_data():
     os.remove("test_data/new_data_1.json")
     os.rmdir("test_data")
 
-
-def test_exact_match(start_server, setup_data):
+def test_exact_match(setup_data):
     config_manager = ConfigManager.get_instance()
     config_manager.load_config('config.json')
-    command = MigrateCommand()
+    old_endpoint = "test_data/old_data_1.json"
+    new_endpoint = "test_data/new_data_1.json"
+    command = MigrateCommand(old_endpoint, new_endpoint)
     assert command.execute()

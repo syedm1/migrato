@@ -3,9 +3,7 @@
     "new_endpoint": "http://localhost:8000/test_data/new_data_1.json",
     "comparisons": [
         {
-            "comparison_type": "exact",
-            "start_depth_old": "accounts.list",
-            "start_depth_new": "accounts.list"
+            "comparison_type": "exact"
         }
     ]
 }

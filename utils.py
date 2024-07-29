@@ -2,10 +2,20 @@ import requests
 
 
 def fetch_data(endpoint):
-    response = requests.get(endpoint)
-    response.raise_for_status()
-    return response.json()
+    # endpoint can be path to json file or url, return data with succcess or failure
+    if endpoint.startswith('http'):
+        response = fetch_data_from_url(endpoint)
+        return response.json(), response.status_code
+    else:
+        return fetch_data_from_file(endpoint), 200
 
+
+def fetch_data_from_url(url):
+    return requests.get(url)
+
+def fetch_data_from_file(file_path):
+    with open(file_path, 'r') as f:
+        return f.read()
 
 def remove_ignored_keys(data, ignore_keys):
     if not ignore_keys:

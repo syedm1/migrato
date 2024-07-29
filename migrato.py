@@ -1,56 +1,33 @@
-import requests
+import argparse
 import logging
-from config_manager import ConfigManager
-from enums import comparison_types as ComparisonType
+from command import MigrateCommand, RegressionTestCommand
 
+def main():
+    logging.basicConfig(level=logging.INFO)
+    parser = argparse.ArgumentParser(description='Migration and Regression Testing Tool')
+    subparsers = parser.add_subparsers(dest='command')
 
-class MigrateCommand:
-    def __init__(self):
-        self.logger = logging.getLogger(__name__)
+    # Migrate command
+    migrate_parser = subparsers.add_parser('migrate', help='Run migration command')
+    migrate_parser.add_argument('--old-endpoint', type=str, help='Old endpoint URL')
+    migrate_parser.add_argument('--new-endpoint', type=str, help='New endpoint URL')
 
-    def execute(self):
-        try:
-            config = ConfigManager.get_instance().get_config()
-            old_response = requests.get(config['old_endpoint'])
-            new_response = requests.get(config['new_endpoint'])
+    # Regression test command
+    regression_parser = subparsers.add_parser('regression', help='Run regression test command')
+    regression_parser.add_argument('csv_file', type=str, help='CSV file with endpoints')
 
-            if old_response.status_code != 200 or new_response.status_code != 200:
-                self.logger.error(
-                    f"Failed to fetch data: Old endpoint status {old_response.status_code}, New endpoint status {new_response.status_code}")
-                return False
+    args = parser.parse_args()
 
-            old_data = old_response.json()
-            new_data = new_response.json()
+    if args.command == 'migrate':
+        command = MigrateCommand(args.old_endpoint, args.new_endpoint)
+    elif args.command == 'regression':
+        command = RegressionTestCommand(args.csv_file)
+    else:
+        parser.print_help()
+        return
 
-            # Log data for debugging
-            self.logger.debug("Old data fetched: %s", old_data)
-            self.logger.debug("New data fetched: %s", new_data)
+    command.execute()
 
-            comparisons = config['comparisons']
-            for comparison in comparisons:
-                if comparison['comparison_type'] == ComparisonType.EXACT:
-                    if not self.compare_exact(old_data, new_data, comparison['start_depth_old'],
-                                              comparison['start_depth_new']):
-                        self.logger.error("Exact comparison failed")
-                        return False
-            self.logger.info("All comparisons succeeded")
-            return True
+if __name__ == '__main__':
+    main()
 
-        except Exception as e:
-            self.logger.exception("Exception occurred during execution")
-            return False
-
-    def compare_exact(self, old_data, new_data, start_depth_old, start_depth_new):
-        # Navigate to the start depth
-        old_value = self.get_nested_value(old_data, start_depth_old.split('.'))
-        new_value = self.get_nested_value(new_data, start_depth_new.split('.'))
-
-        # Log values for debugging
-        self.logger.debug("Comparing exact values: Old value %s, New value %s", old_value, new_value)
-
-        return old_value == new_value
-
-    def get_nested_value(self, data, keys):
-        for key in keys:
-            data = data.get(key, {})
-        return data
