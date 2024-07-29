@@ -5,28 +5,44 @@ from utils import get_nested_value, remove_ignored_keys
 class TestComparisons(unittest.TestCase):
 
     def test_exact_comparison(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'exact'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'exact',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "value2"}
         result = strategy.compare(old_data, new_data)
         self.assertTrue(result)
 
     def test_exact_comparison_failure(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'exact'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'exact',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "different_value"}
         result = strategy.compare(old_data, new_data)
         self.assertFalse(result)
 
     def test_shape_comparison(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'shape'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'shape',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "value2"}
         result = strategy.compare(old_data, new_data)
         self.assertTrue(result)
 
     def test_shape_comparison_failure(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'shape'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'shape',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "different_value", "key3": "value3"}
         result = strategy.compare(old_data, new_data)
@@ -63,7 +79,11 @@ class TestComparisons(unittest.TestCase):
         self.assertFalse(result)
 
     def test_pseudo_comparison(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'pseudo'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'pseudo',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "value2"}
         matched_keys, failed_keys = strategy.compare(old_data, new_data)
@@ -71,7 +91,11 @@ class TestComparisons(unittest.TestCase):
         self.assertEqual(failed_keys, {})
 
     def test_pseudo_comparison_failure(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'pseudo'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'pseudo',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         old_data = {"key1": "value1", "key2": "value2"}
         new_data = {"key1": "value1", "key2": "different_value"}
         matched_keys, failed_keys = strategy.compare(old_data, new_data)
@@ -84,7 +108,11 @@ class TestComparisons(unittest.TestCase):
         ignore_keys = ["key2"]
         old_segment = remove_ignored_keys(old_data, ignore_keys)
         new_segment = remove_ignored_keys(new_data, ignore_keys)
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'exact'})
+        strategy = ComparisonStrategyFactory.get_comparison_strategy({
+            'comparison_type': 'exact',
+            'start_depth_old': '',
+            'start_depth_new': ''
+        })
         result = strategy.compare(old_segment, new_segment)
         self.assertTrue(result)
 

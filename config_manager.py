@@ -2,6 +2,7 @@ import json
 import os
 from enums.comparison_types import ComparisonType
 
+
 class ConfigManager:
     _instance = None
 
@@ -37,6 +38,14 @@ class ConfigManager:
 
     def get_config(self):
         return self.config
+
+    @staticmethod
+    def get_config_for_comparison(comparison_type):
+        config = ConfigManager.get_instance().get_config()
+        for comparison in config['comparisons']:
+            if comparison['comparison_type'] == comparison_type:
+                return comparison
+        return None
 
     def _validate_config(self, config):
         required_keys = ["old_endpoint", "new_endpoint", "comparisons"]

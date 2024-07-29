@@ -69,10 +69,6 @@ class TestBankingAPIMigration(unittest.TestCase):
         result = strategy.compare(self.old_data, self.new_data)
         self.assertTrue(result)
 
-    def test_pseudo_comparison(self):
-        strategy = ComparisonStrategyFactory.get_comparison_strategy({'comparison_type': 'pseudo'})
-        result = strategy.compare(self.old_data, self.new_data)
-        self.assertTrue(result)
 
     def test_custom_comparison(self):
         strategy = ComparisonStrategyFactory.get_comparison_strategy({
@@ -90,6 +86,6 @@ class TestBankingAPIMigration(unittest.TestCase):
         result = strategy.compare(self.old_data_with_customer_id, self.new_data_with_customer_id_as_user_id)
         self.assertTrue(result)
 
-        
+
 if __name__ == '__main__':
     unittest.main()
